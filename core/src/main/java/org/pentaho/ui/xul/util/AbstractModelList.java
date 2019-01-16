@@ -30,29 +30,29 @@ import java.util.ListIterator;
 
 /**
  * Base class for UI model objects that provides {@see java.util.List} implementations and XulEventSource support
- * 
- * @param <T>
+ *
+ * @param <Object>
  *          type of children
  */
-public class AbstractModelList<T> extends XulEventSourceAdapter implements List<T>, Iterable<T>, Serializable,
-    XulManagedCollection {
+public class AbstractModelList<Object> extends XulEventSourceAdapter implements List<java.lang.Object>, Iterable<java.lang.Object>, Serializable,
+  XulManagedCollection {
 
-  protected List<T> children = new ArrayList<T>();
+  protected List<java.lang.Object> children = new ArrayList<>();
 
   public AbstractModelList() {
   }
 
-  public AbstractModelList( List<T> children ) {
-    this.children = new ArrayList<T>( children );
+  public AbstractModelList( List<java.lang.Object> children ) {
+    this.children = new ArrayList<>( children );
   }
 
   @Bindable
-  public List<T> getChildren() {
+  public List<java.lang.Object> getChildren() {
     return this;
   }
 
   @Bindable
-  public void setChildren( List<T> children ) {
+  public void setChildren( List<java.lang.Object> children ) {
     this.children.clear();
     this.children.addAll( children );
     fireCollectionChanged();
@@ -62,55 +62,55 @@ public class AbstractModelList<T> extends XulEventSourceAdapter implements List<
     firePropertyChange( "children", null, this.getChildren() );
   }
 
-  public boolean add( T child ) {
+  public boolean add( java.lang.Object child ) {
     boolean retVal = this.children.add( child );
     onAdd( child );
     fireCollectionChanged();
     return retVal;
   }
 
-  public T remove( int idx ) {
-    T t = children.remove( idx );
+  public java.lang.Object remove( int idx ) {
+  java.lang.Object t = children.remove( idx );
     onRemove( t );
     fireCollectionChanged();
     return t;
   }
 
-  public boolean remove( Object child ) {
+  public boolean remove( java.lang.Object child ) {
     if ( !this.children.contains( child ) ) {
       throw new IllegalArgumentException( "Child does not exist in collection" );
     }
     boolean retVal = this.children.remove( child );
     if ( retVal ) {
-      onRemove( (T) child );
+      onRemove( child );
     }
     fireCollectionChanged();
     return retVal;
   }
 
-  public T removeModel( int pos ) {
+  public java.lang.Object removeModel( int pos ) {
     if ( pos > this.children.size() ) {
       throw new IllegalArgumentException( "Specified position (" + pos + ") is greater than collection length" );
     }
-    T retVal = this.children.remove( pos );
+  java.lang.Object retVal = this.children.remove( pos );
     onRemove( retVal );
     fireCollectionChanged();
     return retVal;
   }
 
-  public Iterator<T> iterator() {
+  public Iterator<java.lang.Object> iterator() {
     return this.children.iterator();
   }
 
   public void clear() {
-    for ( T t : this.children ) {
+    for ( java.lang.Object t : this.children ) {
       onRemove( t );
     }
     this.children.clear();
     fireCollectionChanged();
   }
 
-  public void moveChildUp( T column ) {
+  public void moveChildUp( java.lang.Object column ) {
     if ( !this.children.contains( column ) ) {
       throw new IllegalArgumentException( "child does not exist in collection" );
     }
@@ -122,18 +122,18 @@ public class AbstractModelList<T> extends XulEventSourceAdapter implements List<
   public void moveChildUp( int position ) {
     if ( position - 1 < 0 ) {
       throw new IllegalArgumentException( "Specified position (" + position
-          + ") is greater than child collection length" );
+        + ") is greater than child collection length" );
     }
     // If already at Beginning do nothing
     if ( position == 0 ) {
       return;
     }
-    T child = this.children.remove( position );
+  java.lang.Object child = this.children.remove( position );
     this.children.add( position - 1, child );
     fireCollectionChanged();
   }
 
-  public void moveChildDown( T column ) {
+  public void moveChildDown( java.lang.Object column ) {
     if ( !this.children.contains( column ) ) {
       throw new IllegalArgumentException( "child does not exist in collection" );
     }
@@ -145,25 +145,25 @@ public class AbstractModelList<T> extends XulEventSourceAdapter implements List<
   public void moveChildDown( int position ) {
     if ( position < 0 || position + 1 >= this.children.size() ) {
       throw new IllegalArgumentException( "Specified position (" + position
-          + ") is greater than child collection length" );
+        + ") is greater than child collection length" );
     }
 
-    T child = this.children.remove( position );
+    java.lang.Object child = this.children.remove( position );
     this.children.add( position + 1, child );
     fireCollectionChanged();
   }
 
-  public List<T> asList() {
+  public List<java.lang.Object> asList() {
     // UnmodifiableList not serializable
     // return Collections.unmodifiableList(this.children);
 
     return this.children;
   }
 
-  public boolean addAll( Collection<? extends T> c ) {
+  public boolean addAll( Collection<? extends java.lang.Object> c ) {
     boolean retVal = this.children.addAll( c );
     if ( retVal ) {
-      for ( T t : c ) {
+      for ( java.lang.Object t : c ) {
         onAdd( t );
       }
       fireCollectionChanged();
@@ -171,13 +171,13 @@ public class AbstractModelList<T> extends XulEventSourceAdapter implements List<
     return retVal;
   }
 
-  public boolean contains( Object o ) {
+  public boolean contains( java.lang.Object o ) {
     return this.children.contains( o );
   }
 
   public boolean containsAll( Collection<?> c ) {
     boolean retval = true;
-    for ( Object t : c ) {
+    for ( java.lang.Object t : c ) {
       if ( this.children.contains( t ) == false ) {
         retval = false;
         break;
@@ -192,8 +192,8 @@ public class AbstractModelList<T> extends XulEventSourceAdapter implements List<
 
   public boolean removeAll( Collection<?> c ) {
     boolean retVal = this.children.removeAll( c );
-    for ( Object t : c ) {
-      onRemove( (T) t );
+    for ( java.lang.Object t : c ) {
+      onRemove( t );
     }
 
     fireCollectionChanged();
@@ -211,7 +211,7 @@ public class AbstractModelList<T> extends XulEventSourceAdapter implements List<
     return this.children.size();
   }
 
-  public Object[] toArray() {
+  public java.lang.Object[] toArray() {
     return this.children.toArray();
   }
 
@@ -219,16 +219,16 @@ public class AbstractModelList<T> extends XulEventSourceAdapter implements List<
     return this.children.toArray( a );
   }
 
-  public void add( int index, T element ) {
+  public void add( int index, java.lang.Object element ) {
     children.add( index, element );
     onAdd( element );
     fireCollectionChanged();
   }
 
-  public boolean addAll( int index, Collection<? extends T> c ) {
+  public boolean addAll( int index, Collection<? extends java.lang.Object> c ) {
     boolean retVal = children.addAll( index, c );
     if ( retVal ) {
-      for ( T t : c ) {
+      for ( java.lang.Object t : c ) {
         onAdd( t );
       }
     }
@@ -236,46 +236,46 @@ public class AbstractModelList<T> extends XulEventSourceAdapter implements List<
     return retVal;
   }
 
-  public T get( int index ) {
+  public java.lang.Object get( int index ) {
     return children.get( index );
   }
 
-  public int indexOf( Object o ) {
+  public int indexOf( java.lang.Object o ) {
     return children.indexOf( o );
   }
 
-  public int lastIndexOf( Object o ) {
+  public int lastIndexOf( java.lang.Object o ) {
     return children.lastIndexOf( o );
   }
 
-  public ListIterator<T> listIterator() {
+  public ListIterator<java.lang.Object> listIterator() {
     return children.listIterator();
   }
 
-  public ListIterator<T> listIterator( int index ) {
+  public ListIterator<java.lang.Object> listIterator( int index ) {
     return children.listIterator( index );
   }
 
-  public T set( int index, T element ) {
-    T retVal = children.set( index, element );
+  public java.lang.Object set( int index, java.lang.Object element ) {
+  java.lang.Object retVal = children.set( index, element );
     fireCollectionChanged();
     return retVal;
   }
 
-  public List<T> subList( int fromIndex, int toIndex ) {
+  public List<java.lang.Object> subList( int fromIndex, int toIndex ) {
     // children.subList() does not compile in GWT, re-implemented here
-    List<T> newList = new ArrayList<T>();
+    List<java.lang.Object> newList = new ArrayList<>();
     for ( int i = fromIndex; i < children.size() && i < toIndex; i++ ) {
       newList.add( children.get( i ) );
     }
     return newList;
   }
 
-  public void onAdd( T child ) {
+  public void onAdd( java.lang.Object child ) {
 
   }
 
-  public void onRemove( T child ) {
+  public void onRemove( java.lang.Object child ) {
 
   }
 
